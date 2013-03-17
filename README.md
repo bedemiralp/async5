@@ -3,8 +3,8 @@ async5
 
 Asynchronous (non-blocking) Javascript and CSS Loader
 
-Features
---------
+#Features#
+----------
 * Load JS files without blocking and in parallel
 * Load CSS files
 * Execute a callback function after loading a JS file asynchronously
@@ -16,35 +16,218 @@ Features
 * Ability to pre-define dependencies in the <head> or somewhere central
 * Aggregation support with "provides" feature
 
-Usage
+#Compatibility#
+-------------
+async5.js has been tested to work with;
+
+Desktop Browsers:
+* IE6, IE7, IE8, IE9, IE10
+* Chrome 24, Chrome 25
+* Firefox 18, Firefox 19
+* Safari 5.1, Safari 6
+* Opera 12.14
+
+Mobile Browsers:
+* iOS 6.0.1 / Mobile Safari 6
+* Android 4.1.1 / Chrome 18
+* Andorid 4.1.1 / Webkit Browser 4.0
+* Android 4.0.4 / Webkit Browser 4
+* Windows Phone 7 / IE Mobile 9
+
+#Basic Usage#
 -----------
-### Loading the async5.js ###
-Include async5.js in the head
+Load the async5.js in the HEAD section with a html script tag and then call async5.load() method with appropriate parameters.
 ```
 <HTML>
 <HEAD>
-    <script type="text/javascript src="http://example.com/async5.js"></script>
+    <script type="text/javascript" src="http://example.com/async5.js"></script>
+    <script type="text/javascript>
+        async5.load({
+            name: 'jQuery',
+            url: 'http://code.jquery.com/jquery-1.9.1.min.js',
+            type: 'js',
+            callback: function() {
+                window.alert('jQuery is loaded');
+            }
+        });
+    </script>
 </HEAD>
 <BODY>...</BODY>
 </HTML>
 ```
 
-### Loading a Javascript file without dependencies ###
-Call async5.load function somewhere in the page (in the HEAD or the BODY)
+It's also possible to call the async5.load() method in the BODY section:
+
 ```
-<script type="text/javascript>
-    async5.load({
-        name: 'jQuery',
-        url: 'http://code.jquery.com/jquery-1.9.1.min.js',
-        type: 'js'
-    });
-</script>
+<HTML>
+<HEAD>
+    <script type="text/javascript" src="http://example.com/async5.js"></script>
+</HEAD>
+<BODY>
+......
+......
+......
+    <script type="text/javascript>
+        async5.load({
+            name: 'jQuery',
+            url: 'http://code.jquery.com/jquery-1.9.1.min.js',
+            type: 'js',
+            callback: function() {
+                window.alert('jQuery is loaded');
+            }
+        });
+    </script>
+.....
+.....
+.....
+</BODY>
+</HTML>
 ```
 
+#Methods#
+---------
+## async5.define(name, type, url[, dependsOn, provides]) ##
+This method is used to define a javascript or stylesheet without loading it until it's requested with async5.load() method. This method can be used to create a repository of all javascripts and stylesheets for your project in a central location (ie. repository.js file). You may then load that repository.js file right after async5.js in the HEAD section of the html and call the asyn5.load('name') method only for the scripts that you need on a particular page.
+
+####name####
+
+**Type:** String or Object or Array of Objects
+
+A string containing the name for the script or stylesheet. This string will be used for dependency resolution. Each script/stylesheet must have a unique name.
+
+Or,
+
+An Object with name, type, url, dependsOn, provides properties.
+
+Or,
+
+An Array of objects given above.
+
+####type####
+
+**Type:** Enum
+
+Can take the values 'js' or 'css'
+
+####url####
+
+**Type:** String
+
+A string containing the URL of the script or stylesheet
+
+####dependsOn####
+
+**Type:** Array
+
+Array of Strings containing list of the names for the dependencies. Async5.js will make sure that all dependencies are loaded before loading this script.
+
+####provides####
+**Type:** Array
+
+Array of Strings containing list of the names of the scripts included in this particular script.
+
+## async5.load(name [, callback, type, url, dependsOn, provides]) ##
+This method loads a javascript or stylesheet. If "dependsOn" parameter is given asn an array, dependencies are loaded, first. If the "callback" parameter is defined and it's a closure, then the callback function will be executed as soon as the script is loaded.
+
+####name####
+
+**Type:** String or Object or Array of Objects
+
+A string containing the name for the script or stylesheet. This string will be used for dependency resolution. Each script/stylesheet must have a unique name.
+
+Or,
+
+An Object with name, callback, type, url, dependsOn, provides properties.
+
+Or,
+
+An Array of objects given above.
+
+####callback####
+
+**Type:** Closure (function) or FALSE
+
+A closure which will be called as soon as the script or stylesheet is loaded
+
+####type####
+
+**Type:** Enum
+
+Can take the values 'js' or 'css'
+
+####url####
+
+**Type:** String
+
+A string containing the URL of the script or stylesheet
+
+####dependsOn####
+
+**Type:** Array
+
+Array of Strings containing list of the names for the dependencies. Async5.js will make sure that all dependencies are loaded before loading this script.
+
+####provides####
+**Type:** Array
+
+Array of Strings containing list of the names of the scripts included in this particular script.
+
+## Several different ways for calling the methods ##
+
+#### Calling the method with parameters ####
+```
+async5.load(
+    'jQuery',
+    'http://code.jquery.com/jquery-1.9.1.min.js',
+    'js',
+    function() {
+        window.alert('jQuery is loaded'); 
+    }
+);
+```
+#### Calling the method with a plain object ####
+```
+async5.load({
+    name: 'jQuery',
+    url: 'http://code.jquery.com/jquery-1.9.1.min.js',
+    type: 'js',
+    callback: function() {
+        window.alert('jQuery is loaded');
+    }
+});
+```
+
+#### Calling the method with an array of objects ####
+```
+async5.load([
+{
+    name: 'jQuery',
+    url: '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
+    type: 'js',
+    callback: function() {
+        window.alert('jQuery is loaded');
+    }
+},
+{
+    name: 'jQueryUI',
+    url: '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js',
+    type: 'js',
+    dependsOn: ['jQuery']
+    callback: function() {
+        window.alert('jQueryUI is loaded');
+    }
+}
+]);
+```
+
+The same rules apply to async5.define() method. It can be called with functions parameters, with an object or with an array of objects.
+
+#More Examples#
+-------------
 ### Loading a CSS file ###
 Call async5.load function somewhere in the page (in the HEAD or the BODY)
 ```
-<script type="text/javascript>
+<script type="text/javascript">
     async5.load({
         name: 'sample',
         url: 'http://example.com/sample.css',
@@ -54,28 +237,41 @@ Call async5.load function somewhere in the page (in the HEAD or the BODY)
 ```
 
 ### Defining dependencies ###
-Call async5.define function anywhere in the page
+Call the async5.define function anywhere in the page
 ```
-<script type="text/javascript>
-    async5.define({
-        name: 'jQuery',
-        url: 'http://code.jquery.com/jquery-1.9.1.min.js',
-        type: 'js'
-    });
+<script type="text/javascript">
+    async5.define([
+        {
+            name: 'lazyLoad',
+            url: 'http://example.com/jquery.lazyload.js',
+            type: 'js',
+            dependsOn: ['jQuery']
+        },
+        {
+            name: 'jQuery',
+            url: '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
+            type: 'js'
+        },
+        {
+            name: 'jQueryUI',
+            url: '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js',
+            type: 'js',
+            dependsOn: ['jQuery']
+        }
 
-    async5.define({
-        name: 'lazyLoad',
-        url: 'http://example.com/jquery.lazyload.js',
-        type: 'js',
-        dependsOn: ['jQuery']
-    });
+    ]);
 </script>
 ```
 Loading a previously defined Javascript file by calling it with it's name
 
 ```
 <script type="text/javascript">
-    async5.load({ name: 'lazyLoad'});
+    async5.load({ 
+        name: 'lazyLoad',
+        callback: function() {
+             window.alert('lazyLoad is loaded');
+        }
+    });
 </script>
 ```
 
@@ -83,34 +279,42 @@ When you call async5.load method for 'lazyLoad', async5 checks if the 'lazyLoad'
 
 ### Aggregated files support  ###
 ```
-<script type="text/javascript>
-    async5.define({
-        name: 'jQuery',
-        url: 'http://example.com/jquery-ui.js',
-        type: 'js'
-        provides: ['jQuery', 'jQueryUI']
-    });
-
-    async5.define({
-        name: 'lazyLoad',
-        url: 'http://example.com/jquery.lazyload.js',
-        type: 'js',
-        dependsOn: ['jQuery']
-    });
+<script type="text/javascript">
+    async5.define([
+        {
+            name: 'jQuery',
+            url: 'http://code.jquery.com/jquery-1.9.1.min.js',
+            type: 'js'
+        },
+        {
+            name: 'combined',
+            url: 'http://example.com/combined.js',
+            type: 'js'
+            provides: ['jQuery', 'jQueryUI']
+        },
+        {
+            name: 'lazyLoad',
+            url: 'http://example.com/jquery.lazyload.js',
+            type: 'js',
+            dependsOn: ['jQuery']
+        }
+    ]);
     
-    asyn5.load({
-        name: 'lazyLoad'
-    });
+    asyn5.load(
+        ['combinded', 'lazyLoad']
+    );
+
 </script>
 ```
-async5 checkes 'lazyLoad's dependencies. It sees that 'jQuery' is required for the 'lazyLoad' to function and it loads 'jQuery'. 'jQueryUI' is already loaded with the 'jQuery' so if any other file asks for 'jQueryUI' then it will be not loaded again.
 
-To Do
------
+This example loads 'combined' and 'lazyLoad' but does not load 'jQuery' because jQuery is already included in the 'combined' script.
+
+#To Do#
+-------
 * Ability to define timeout for loading JS/CSS files
 * Ability to define callback function which will be triggered when loading of a JS/CSS file fails
 
-License
+#License#
 ---------
 Copyright 2013 Berke Ediz Demiralp
 
@@ -125,6 +329,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
-
-
