@@ -37,7 +37,7 @@ Mobile Browsers:
 #Basic Usage#
 -----------
 Load the async5.js in the HEAD section with a html script tag and then call async5.load() method with appropriate parameters.
-```
+```html
 <HTML>
 <HEAD>
     <script type="text/javascript" src="http://example.com/async5.js"></script>
@@ -58,7 +58,7 @@ Load the async5.js in the HEAD section with a html script tag and then call asyn
 
 It's also possible to call the async5.load() method in the BODY section:
 
-```
+```html
 <HTML>
 <HEAD>
     <script type="text/javascript" src="http://example.com/async5.js"></script>
@@ -175,7 +175,7 @@ Array of Strings containing list of the names of the scripts included in this pa
 ## Several different ways for calling the methods ##
 
 #### Calling the method with parameters ####
-```
+```js
 async5.load(
     'jQuery',
     'http://code.jquery.com/jquery-1.9.1.min.js',
@@ -186,7 +186,7 @@ async5.load(
 );
 ```
 #### Calling the method with a plain object ####
-```
+```js
 async5.load({
     name: 'jQuery',
     url: 'http://code.jquery.com/jquery-1.9.1.min.js',
@@ -198,7 +198,7 @@ async5.load({
 ```
 
 #### Calling the method with an array of objects ####
-```
+```js
 async5.load([
 {
     name: 'jQuery',
@@ -226,7 +226,7 @@ The same rules apply to async5.define() method. It can be called with functions 
 -------------
 ### Loading a CSS file ###
 Call async5.load function somewhere in the page (in the HEAD or the BODY)
-```
+```html
 <script type="text/javascript">
     async5.load({
         name: 'sample',
@@ -238,7 +238,7 @@ Call async5.load function somewhere in the page (in the HEAD or the BODY)
 
 ### Defining dependencies ###
 Call the async5.define function anywhere in the page
-```
+```html
 <script type="text/javascript">
     async5.define([
         {
@@ -264,7 +264,7 @@ Call the async5.define function anywhere in the page
 ```
 Loading a previously defined Javascript file by calling it with it's name
 
-```
+```html
 <script type="text/javascript">
     async5.load({ 
         name: 'lazyLoad',
@@ -278,7 +278,7 @@ Loading a previously defined Javascript file by calling it with it's name
 When you call async5.load method for 'lazyLoad', async5 checks if the 'lazyLoad' has any dependencies. If there are dependencies, it loads and execute each dependent file and then loads and executes the 'lazyLoad' script. If a dependency has already been loaded then it will not be loaded or executed again.
 
 ### Aggregated files support  ###
-```
+```html
 <script type="text/javascript">
     async5.define([
         {
