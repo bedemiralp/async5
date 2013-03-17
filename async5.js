@@ -317,11 +317,13 @@
                     newElement.type = 'text/javascript';
                     newElement.src = url;
                     newElement.async = true;
-                } else {
+                } else if (type === 'css') {
                     newElement = document.createElement('link');
                     newElement.setAttribute('rel', 'stylesheet');
                     newElement.type = 'text/css';
                     newElement.href = url;
+                } else {
+                    return false;
                 }
 
                 var head = document.head || document.getElementsByTagName("head")[0] || document.documentElement;
