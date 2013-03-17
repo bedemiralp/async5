@@ -17,7 +17,14 @@ Asynchronous (non-blocking) Javascript and CSS Loader
 * Aggregation support with "provides" feature
 
 #Compatibility#
--------------
+---------------
+async5.js uses "DOM Level 2 Core" and "DOM Level 2 Event" APIs. The following browsers are known to support the required "DOM Level 2" APIs hence async5.js is expected to be compatible with them:
+* Internet Explorer 6 and later
+* Chrome 1.0 and later
+* Firefox 1.5 and later
+* Safari 1.0 and later
+* Opera 7 and later
+
 async5.js has been tested to work with;
 
 Desktop Browsers:
