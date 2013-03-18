@@ -281,6 +281,15 @@
 
         /**
          *
+         * @param {string} name
+         * @param {function()} callback
+         */
+        ready: function(name, callback) {
+            this.load(name, callback);
+        },
+
+        /**
+         *
          * @param {string} url
          * @param {string} type
          * @param {function()=} callback
