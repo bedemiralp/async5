@@ -179,6 +179,22 @@ Array of Strings containing list of the names for the dependencies. Async5.js wi
 
 Array of Strings containing list of the names of the scripts included in this particular script.
 
+## async5.ready(name, callback) ##
+This method triggers the callback function as soon as the named script is loaded.
+
+####name####
+
+**Type:** String
+
+A string containing the name for the script or stylesheet. This string will be used for dependency resolution. Each script/stylesheet must have a unique name.
+
+####callback####
+
+**Type:** Closure (function) or FALSE
+
+A closure which will be called as soon as the script or stylesheet is loaded
+
+
 ## Several different ways for calling the methods ##
 
 #### Calling the method with parameters ####
